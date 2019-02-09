@@ -35,10 +35,6 @@ public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
 
     @Override
     public double calculateFigureDissectRatio(Tetrahedron tetrahedron) {
-
-
-        calculateDistanceBetweenPoints();
-
         return 0;
     }
 
