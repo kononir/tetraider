@@ -1,50 +1,58 @@
 package com.epam.tetraider;
 
-import com.epam.tetraider.logic.DataReaderImpl;
+import com.epam.tetraider.data.DataReaderImpl;
+import com.epam.tetraider.exceptions.FileIsEmptyException;
+import com.epam.tetraider.exceptions.IllegalFileNameException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DataReaderImplTests {
     @Test
-    public void testReadLineShouldReturnOneWhenReadFileWithOne() throws IOException {
+    public void testReadFileShouldReturnOneWhenReadFileWithOne() throws IOException,
+            IllegalFileNameException, FileIsEmptyException {
         // given
+        DataReaderImpl dataReader = new DataReaderImpl();
         String path = "src/test/resources/one.txt";
-        DataReaderImpl dataReader = new DataReaderImpl(path);
-        String expected = "1";
+        List<String> expected = Collections.singletonList("1");
 
         // when
-        String actual = dataReader.readLine();
+        List<String> actual = dataReader.readFile(path);
 
         // then
         Assert.assertEquals(expected, actual);
     }
 
-    @Test (expected = FileNotFoundException.class)
-    public void testReadLineShouldThrowIllegalPathException() throws IOException {
+    @Test (expected = IllegalFileNameException.class)
+    public void testReadFileShouldThrowIllegalFileNameException() throws IOException,
+            IllegalFileNameException, FileIsEmptyException {
         // given
+        DataReaderImpl dataReader = new DataReaderImpl();
         String path = "src/test/resources/illegalName.txt";
-        DataReaderImpl dataReader = new DataReaderImpl(path);
 
         // when
-        dataReader.readLine();
+        dataReader.readFile(path);
 
         // then
         Assert.fail();
     }
 
-    @Test
-    public void testReadLineShouldReturnNullWhenReachedFileEnd() throws IOException {
+    @Test (expected = FileIsEmptyException.class)
+    public void testReadFileShouldThrowFileIsEmptyExceptionWhenReadEmptyFile() throws IOException,
+            IllegalFileNameException, FileIsEmptyException {
         // given
+        DataReaderImpl dataReader = new DataReaderImpl();
+        List<String> expected = new LinkedList<>();
         String path = "src/test/resources/empty.txt";
-        DataReaderImpl dataReader = new DataReaderImpl(path);
 
         // when
-        String actual = dataReader.readLine();
+        List<String> actual = dataReader.readFile(path);
 
         // then
-        Assert.assertNull(actual);
+        Assert.assertEquals(expected, actual);
     }
 }

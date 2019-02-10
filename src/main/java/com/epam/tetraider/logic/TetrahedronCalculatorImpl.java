@@ -1,10 +1,11 @@
 package com.epam.tetraider.logic;
 
-import com.epam.tetraider.interfaces.TetrahedronCalculator;
+import com.epam.tetraider.logic.interfaces.TetrahedronCalculator;
 import com.epam.tetraider.model.Point;
 import com.epam.tetraider.model.Tetrahedron;
 
 public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
+
     @Override
     public double calculateSurfaceSquare(Tetrahedron tetrahedron) {
         Point baseTopPoint = tetrahedron.getBaseTopPoint();
@@ -25,6 +26,68 @@ public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
 
         double inscribedRadius = calculateDistanceBetweenPoints(baseTopPoint, baseCenterPoint);
 
+        return calculateVolumeByInscribedRadius(inscribedRadius);
+    }
+
+    @Override
+    public double calculateFigureDissectRatio(Tetrahedron tetrahedron) {
+        Point topPoint = tetrahedron.getTopPoint();
+        Point baseCenterPoint = tetrahedron.getBaseCenterPoint();
+        Point baseTopPoint = tetrahedron.getBaseTopPoint();
+
+        double mainTetrahedronHeight = calculateDistanceBetweenPoints(topPoint, baseCenterPoint);
+        double smallTetrahedronHeight = calculateSmallTetrahedronHeight(topPoint, baseCenterPoint);
+
+        double result;
+
+        if (smallTetrahedronHeight < mainTetrahedronHeight) {
+            double proportion = smallTetrahedronHeight / mainTetrahedronHeight;
+
+            double mainTetrahedronInscribedRadius = calculateDistanceBetweenPoints(baseTopPoint, baseCenterPoint);
+            double smallTetrahedronInscribedRadius = proportion * mainTetrahedronInscribedRadius;
+
+            double mainTetrahedronVolume = calculateVolumeByInscribedRadius(mainTetrahedronInscribedRadius);
+            double smallTetrahedronVolume = calculateVolumeByInscribedRadius(smallTetrahedronInscribedRadius);
+
+            double truncatedTetrahedronVolume = mainTetrahedronVolume - smallTetrahedronVolume;
+
+            result = smallTetrahedronVolume / truncatedTetrahedronVolume;
+        } else {
+            result = 0;
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean isBaseLiesAtCoordinatePlane(Tetrahedron tetrahedron) {
+        Point baseTopPoint = tetrahedron.getBaseTopPoint();
+        Point baseCenterPoint = tetrahedron.getBaseCenterPoint();
+
+        double baseTopPointZCord = baseTopPoint.getZCord();
+        double baseCenterPointZCord = baseCenterPoint.getZCord();
+
+        return (baseTopPointZCord == 0 && baseCenterPointZCord == 0);
+    }
+
+    private double calculateSmallTetrahedronHeight(Point topPoint, Point baseCenterPoint) {
+        double intersectionPointXCord = topPoint.getXCord();
+        double intersectionPointYCord = topPoint.getYCord();
+        double intersectionPointZCord = 0;
+        Point intersectionCenterPoint = new Point(intersectionPointXCord, intersectionPointYCord, intersectionPointZCord);
+
+        double smallTetrahedronHeight;
+
+        if (topPoint.getZCord() > 0) {
+            smallTetrahedronHeight = calculateDistanceBetweenPoints(topPoint, intersectionCenterPoint);
+        } else {
+            smallTetrahedronHeight = calculateDistanceBetweenPoints(baseCenterPoint, intersectionCenterPoint);
+        }
+
+        return smallTetrahedronHeight;
+    }
+
+    private double calculateVolumeByInscribedRadius(double inscribedRadius) {
         double faceSquare = calculateFaceSquare(inscribedRadius);
         double height = calculateHeight(inscribedRadius);
 
@@ -33,13 +96,7 @@ public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
         return coefficient * faceSquare * height;
     }
 
-    @Override
-    public double calculateFigureDissectRatio(Tetrahedron tetrahedron) {
-        return 0;
-    }
-
     private double calculateFaceSquare(double inscribedRadius) {
-
         double side = calculateSide(inscribedRadius);
         double height = calculateHeight(inscribedRadius);
 
@@ -52,13 +109,13 @@ public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
         return inscribedRadius * Math.sqrt(3.0);
     }
 
-    private double calculateHeight(double inscribedRadius) {
+    public double calculateHeight(double inscribedRadius) {
         double coefficient = 3.0 / 2.0;
 
         return coefficient * inscribedRadius;
     }
 
-    private double calculateDistanceBetweenPoints(Point firstPoint, Point secondPoint) {
+    public double calculateDistanceBetweenPoints(Point firstPoint, Point secondPoint) {
         double firstPointXCord = firstPoint.getXCord();
         double secondPointXCord = secondPoint.getXCord();
 

@@ -1,0 +1,6 @@
+com\epam\tetraider\DataValidatorImplTests.class
+com\epam\tetraider\DataParserImplTests.class
+com\epam\tetraider\DataReaderImplTests.class
+com\epam\tetraider\DirectorImplTests.class
+com\epam\tetraider\PointValidatorImplTests.class
+com\epam\tetraider\TetrahedronCalculatorImplTests.class

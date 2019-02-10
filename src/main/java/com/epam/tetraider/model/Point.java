@@ -25,7 +25,7 @@ public class Point {
 
     @Override
     public String toString() {
-        return getClass().getName() + "@x: " + xCord + ", y: " + yCord + ", z:" + zCord;
+        return getClass().getName() + " @x: " + xCord + ", y: " + yCord + ", z: " + zCord;
     }
 
     @Override
