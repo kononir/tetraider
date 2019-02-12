@@ -15,9 +15,7 @@ public class DataReaderImpl implements DataReader {
     public List<String> readFile(String filePath) throws IllegalFileNameException, FileIsEmptyException, ReadingProblemsException {
         List<String> result;
 
-        try {
-            File file = new File(filePath);
-            FileReader fileReader = new FileReader(file);
+        try (FileReader fileReader = new FileReader(filePath);) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             result = new LinkedList<>();

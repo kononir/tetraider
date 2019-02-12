@@ -48,34 +48,19 @@ public class Tetrahedron {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (this.getClass() != obj.getClass()) {
+        if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
 
         Tetrahedron tetrahedron = (Tetrahedron) obj;
+
         Point topPointOther = tetrahedron.topPoint;
-
-        if (topPoint == null || !topPoint.equals(topPointOther)) {
-            return false;
-        }
-
         Point baseCenterPointOther = tetrahedron.baseCenterPoint;
-
-        if (baseCenterPoint == null || !baseCenterPoint.equals(baseCenterPointOther)) {
-            return false;
-        }
-
         Point baseTopPointOther = tetrahedron.baseTopPoint;
 
-        if (baseTopPoint == null || !baseTopPoint.equals(baseTopPointOther)) {
-            return false;
-        }
-
-        return true;
+        return topPoint != null && topPoint.equals(topPointOther)
+                && baseCenterPoint != null && baseCenterPoint.equals(baseCenterPointOther)
+                && baseTopPoint != null && baseTopPoint.equals(baseTopPointOther);
     }
 
     @Override

@@ -34,36 +34,17 @@ public class Point {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (obj.getClass() != this.getClass()) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
 
         Point point = (Point) obj;
 
-        double xCordOther = point.xCord;
         double delta = 0.01;
 
-        if (xCordOther - xCord > delta) {
-            return false;
-        }
-
-        double yCordOther = point.yCord;
-
-        if (yCordOther - yCord > delta) {
-            return false;
-        }
-
-        double zCordOther = point.zCord;
-
-        if (zCordOther - zCord > delta) {
-            return false;
-        }
-
-        return true;
+        return point.xCord - xCord <= delta
+                && point.yCord - yCord <= delta
+                && point.zCord - zCord <= delta;
     }
 
     @Override
