@@ -8,6 +8,7 @@ import com.epam.tetraider.exceptions.IllegalFileNameException;
 import com.epam.tetraider.data.interfaces.DataParser;
 import com.epam.tetraider.data.interfaces.DataReader;
 import com.epam.tetraider.data.interfaces.DataValidator;
+import com.epam.tetraider.exceptions.ReadingProblemsException;
 import com.epam.tetraider.logic.PointsValidatorImpl;
 import com.epam.tetraider.logic.interfaces.PointsValidator;
 import com.epam.tetraider.model.Point;
@@ -15,7 +16,6 @@ import com.epam.tetraider.model.Tetrahedron;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 public class DirectorTests {
     @Test
     public void testManageLoadingTetrahedronsReturnListWithOneTetrahedron() throws IllegalFileNameException,
-            FileIsEmptyException, IOException {
+            FileIsEmptyException, ReadingProblemsException {
         // given
         DataReader dataReader = mock(DataReaderImpl.class);
 
@@ -77,8 +77,8 @@ public class DirectorTests {
     }
 
     @Test
-    public void testManageLoadingTetrahedronsReturnEmptyList() throws IllegalFileNameException,
-            FileIsEmptyException, IOException {
+    public void testManageLoadingTetrahedronsReturnEmptyListWhenDataIsInvalid() throws IllegalFileNameException,
+            FileIsEmptyException, ReadingProblemsException {
         // given
         DataReader dataReader = mock(DataReaderImpl.class);
 
@@ -111,6 +111,70 @@ public class DirectorTests {
         verify(dataReader, times(numberOfInvocation)).readFile(anyString());
         verify(dataValidator, times(numberOfInvocation)).isValidLine(line);
 
+        verify(dataParser, never()).parse(anyString());
+        verify(pointsValidator, never()).isValidPoints((Point) anyObject(), (Point) anyObject(), (Point) anyObject());
+    }
+
+    @Test
+    public void testManageLoadingTetrahedronsReturnEmptyListWhenIllegalFileName() throws IllegalFileNameException,
+            FileIsEmptyException, ReadingProblemsException {
+        // given
+        DataReader dataReader = mock(DataReaderImpl.class);
+
+        String path = "illegal file name!";
+        when(dataReader.readFile(path)).thenThrow(new IllegalFileNameException());
+
+        DataValidator dataValidator = mock(DataValidatorImpl.class);
+        DataParser dataParser = mock(DataParserImpl.class);
+        PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
+
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator);
+
+        List<Tetrahedron> expected = Collections.emptyList();
+
+        // when
+        List<Tetrahedron> actual = director.manageLoadingTetrahedrons(path);
+
+        // then
+        Assert.assertEquals(expected, actual);
+
+        int numberOfInvocation = 1;
+
+        verify(dataReader, times(numberOfInvocation)).readFile(anyString());
+
+        verify(dataValidator, never()).isValidLine(anyString());
+        verify(dataParser, never()).parse(anyString());
+        verify(pointsValidator, never()).isValidPoints((Point) anyObject(), (Point) anyObject(), (Point) anyObject());
+    }
+
+    @Test
+    public void testManageLoadingTetrahedronsReturnEmptyListWhenFileIsEmpty() throws IllegalFileNameException,
+            FileIsEmptyException, ReadingProblemsException {
+        // given
+        DataReader dataReader = mock(DataReaderImpl.class);
+
+        String path = "empty file";
+        when(dataReader.readFile(path)).thenThrow(new FileIsEmptyException());
+
+        DataValidator dataValidator = mock(DataValidatorImpl.class);
+        DataParser dataParser = mock(DataParserImpl.class);
+        PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
+
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator);
+
+        List<Tetrahedron> expected = Collections.emptyList();
+
+        // when
+        List<Tetrahedron> actual = director.manageLoadingTetrahedrons(path);
+
+        // then
+        Assert.assertEquals(expected, actual);
+
+        int numberOfInvocation = 1;
+
+        verify(dataReader, times(numberOfInvocation)).readFile(anyString());
+
+        verify(dataValidator, never()).isValidLine(anyString());
         verify(dataParser, never()).parse(anyString());
         verify(pointsValidator, never()).isValidPoints((Point) anyObject(), (Point) anyObject(), (Point) anyObject());
     }

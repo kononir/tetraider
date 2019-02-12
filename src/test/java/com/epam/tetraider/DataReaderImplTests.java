@@ -3,18 +3,18 @@ package com.epam.tetraider;
 import com.epam.tetraider.data.DataReaderImpl;
 import com.epam.tetraider.exceptions.FileIsEmptyException;
 import com.epam.tetraider.exceptions.IllegalFileNameException;
+import com.epam.tetraider.exceptions.ReadingProblemsException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DataReaderImplTests {
     @Test
-    public void testReadFileShouldReturnOneWhenReadFileWithOne() throws IOException,
-            IllegalFileNameException, FileIsEmptyException {
+    public void testReadFileShouldReturnOneWhenReadFileWithOne() throws IllegalFileNameException,
+            FileIsEmptyException, ReadingProblemsException {
         // given
         DataReaderImpl dataReader = new DataReaderImpl();
         String path = "src/test/resources/one.txt";
@@ -28,8 +28,8 @@ public class DataReaderImplTests {
     }
 
     @Test (expected = IllegalFileNameException.class)
-    public void testReadFileShouldThrowIllegalFileNameException() throws IOException,
-            IllegalFileNameException, FileIsEmptyException {
+    public void testReadFileShouldThrowIllegalFileNameException() throws IllegalFileNameException,
+            FileIsEmptyException, ReadingProblemsException {
         // given
         DataReaderImpl dataReader = new DataReaderImpl();
         String path = "src/test/resources/illegalName.txt";
@@ -42,8 +42,8 @@ public class DataReaderImplTests {
     }
 
     @Test (expected = FileIsEmptyException.class)
-    public void testReadFileShouldThrowFileIsEmptyExceptionWhenReadEmptyFile() throws IOException,
-            IllegalFileNameException, FileIsEmptyException {
+    public void testReadFileShouldThrowFileIsEmptyExceptionWhenReadEmptyFile() throws IllegalFileNameException,
+            FileIsEmptyException, ReadingProblemsException {
         // given
         DataReaderImpl dataReader = new DataReaderImpl();
         List<String> expected = new LinkedList<>();
