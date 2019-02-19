@@ -1,9 +1,9 @@
 package com.epam.tetraider.model;
 
 public class Tetrahedron {
-    private final Point topPoint;
-    private final Point baseCenterPoint;
-    private final Point baseTopPoint;
+    private Point topPoint;
+    private Point baseCenterPoint;
+    private Point baseTopPoint;
 
     public Tetrahedron(Point topPoint, Point baseCenterPoint, Point baseTopPoint) {
         this.topPoint = topPoint;
@@ -21,6 +21,18 @@ public class Tetrahedron {
 
     public Point getBaseTopPoint() {
         return baseTopPoint;
+    }
+
+    public void setTopPoint(Point topPoint) {
+        this.topPoint = topPoint;
+    }
+
+    public void setBaseCenterPoint(Point baseCenterPoint) {
+        this.baseCenterPoint = baseCenterPoint;
+    }
+
+    public void setBaseTopPoint(Point baseTopPoint) {
+        this.baseTopPoint = baseTopPoint;
     }
 
     @Override

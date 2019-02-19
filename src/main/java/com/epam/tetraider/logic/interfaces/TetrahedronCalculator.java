@@ -3,7 +3,7 @@ package com.epam.tetraider.logic.interfaces;
 import com.epam.tetraider.model.Tetrahedron;
 
 public interface TetrahedronCalculator {
-    double calculateSurfaceSquare(Tetrahedron tetrahedron);
+    double calculateSurfaceArea(Tetrahedron tetrahedron);
 
     double calculateVolume(Tetrahedron tetrahedron);
 

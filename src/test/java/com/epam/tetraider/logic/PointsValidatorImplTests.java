@@ -1,4 +1,4 @@
-package com.epam.tetraider;
+package com.epam.tetraider.logic;
 
 import com.epam.tetraider.logic.PointsValidatorImpl;
 import com.epam.tetraider.model.Point;

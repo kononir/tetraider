@@ -1,4 +1,4 @@
-package com.epam.tetraider;
+package com.epam.tetraider.data;
 
 import com.epam.tetraider.data.DataValidatorImpl;
 import org.junit.Assert;

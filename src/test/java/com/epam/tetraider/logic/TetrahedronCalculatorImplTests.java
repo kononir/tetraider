@@ -1,4 +1,4 @@
-package com.epam.tetraider;
+package com.epam.tetraider.logic;
 
 import com.epam.tetraider.logic.TetrahedronCalculatorImpl;
 import com.epam.tetraider.logic.interfaces.TetrahedronCalculator;
@@ -37,7 +37,7 @@ public class TetrahedronCalculatorImplTests {
         TetrahedronCalculator tetrahedronCalculator = new TetrahedronCalculatorImpl();
 
         // when
-        double actual = tetrahedronCalculator.calculateSurfaceSquare(tetrahedron);
+        double actual = tetrahedronCalculator.calculateSurfaceArea(tetrahedron);
 
         // then
         Assert.assertEquals(expected, actual, delta);

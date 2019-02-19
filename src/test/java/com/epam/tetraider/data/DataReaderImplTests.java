@@ -1,4 +1,4 @@
-package com.epam.tetraider;
+package com.epam.tetraider.data;
 
 import com.epam.tetraider.data.DataReaderImpl;
 import com.epam.tetraider.exceptions.FileIsEmptyException;
@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DataReaderImplTests {
+
+
     @Test
     public void testReadFileShouldReturnOneWhenReadFileWithOne() throws IllegalFileNameException,
             FileIsEmptyException, ReadingProblemsException {
@@ -32,7 +34,7 @@ public class DataReaderImplTests {
             FileIsEmptyException, ReadingProblemsException {
         // given
         DataReaderImpl dataReader = new DataReaderImpl();
-        String path = "src/test/resources/illegalName.txt";
+        String path = "illegal path";
 
         // when
         dataReader.readFile(path);

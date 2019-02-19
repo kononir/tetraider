@@ -1,5 +1,6 @@
 package com.epam.tetraider.logic;
 
+import com.epam.tetraider.logic.interfaces.LineCalculator;
 import com.epam.tetraider.logic.interfaces.PointsValidator;
 import com.epam.tetraider.model.Point;
 
@@ -36,12 +37,14 @@ public class PointsValidatorImpl implements PointsValidator {
     }
 
     private boolean isConsistentPoints(Point topPoint, Point baseCenterPoint, Point baseTopPoint) {
-        TetrahedronCalculatorImpl calculator = new TetrahedronCalculatorImpl();
+        LineCalculator lineCalculator = new LineCalculatorImpl();
 
-        double inscribedRadius = calculator.calculateDistanceBetweenPoints(baseCenterPoint, baseTopPoint);
-        double expectedHeight = calculator.calculateHeight(inscribedRadius);
+        double inscribedRadius = lineCalculator.calculateDistanceBetweenPoints(baseCenterPoint, baseTopPoint);
 
-        double actualHeight = calculator.calculateDistanceBetweenPoints(topPoint, baseCenterPoint);
+        double coefficient = 3.0 / 2.0;
+        double expectedHeight = coefficient * inscribedRadius;
+
+        double actualHeight = lineCalculator.calculateDistanceBetweenPoints(topPoint, baseCenterPoint);
 
         double delta = 0.01;
 

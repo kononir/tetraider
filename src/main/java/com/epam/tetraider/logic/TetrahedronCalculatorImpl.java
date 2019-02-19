@@ -1,5 +1,6 @@
 package com.epam.tetraider.logic;
 
+import com.epam.tetraider.logic.interfaces.LineCalculator;
 import com.epam.tetraider.logic.interfaces.TetrahedronCalculator;
 import com.epam.tetraider.model.Point;
 import com.epam.tetraider.model.Tetrahedron;
@@ -7,11 +8,9 @@ import com.epam.tetraider.model.Tetrahedron;
 public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
 
     @Override
-    public double calculateSurfaceSquare(Tetrahedron tetrahedron) {
-        Point baseTopPoint = tetrahedron.getBaseTopPoint();
-        Point baseCenterPoint = tetrahedron.getBaseCenterPoint();
+    public double calculateSurfaceArea(Tetrahedron tetrahedron) {
+        double inscribedRadius = calculateInscribedRadius(tetrahedron);
 
-        double inscribedRadius = calculateDistanceBetweenPoints(baseTopPoint, baseCenterPoint);
         double faceSquare = calculateFaceSquare(inscribedRadius);
 
         int facesNumber = 4;
@@ -21,10 +20,7 @@ public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
 
     @Override
     public double calculateVolume(Tetrahedron tetrahedron) {
-        Point baseTopPoint = tetrahedron.getBaseTopPoint();
-        Point baseCenterPoint = tetrahedron.getBaseCenterPoint();
-
-        double inscribedRadius = calculateDistanceBetweenPoints(baseTopPoint, baseCenterPoint);
+        double inscribedRadius = calculateInscribedRadius(tetrahedron);
 
         return calculateVolumeByInscribedRadius(inscribedRadius);
     }
@@ -35,7 +31,9 @@ public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
         Point baseCenterPoint = tetrahedron.getBaseCenterPoint();
         Point baseTopPoint = tetrahedron.getBaseTopPoint();
 
-        double mainTetrahedronHeight = calculateDistanceBetweenPoints(topPoint, baseCenterPoint);
+        LineCalculator lineCalculator = new LineCalculatorImpl();
+
+        double mainTetrahedronHeight = lineCalculator.calculateDistanceBetweenPoints(topPoint, baseCenterPoint);
         double smallTetrahedronHeight = calculateSmallTetrahedronHeight(topPoint, baseCenterPoint);
 
         double result;
@@ -43,7 +41,9 @@ public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
         if (smallTetrahedronHeight < mainTetrahedronHeight) {
             double proportion = smallTetrahedronHeight / mainTetrahedronHeight;
 
-            double mainTetrahedronInscribedRadius = calculateDistanceBetweenPoints(baseTopPoint, baseCenterPoint);
+            double mainTetrahedronInscribedRadius = lineCalculator.calculateDistanceBetweenPoints(
+                    baseTopPoint, baseCenterPoint
+            );
             double smallTetrahedronInscribedRadius = proportion * mainTetrahedronInscribedRadius;
 
             double mainTetrahedronVolume = calculateVolumeByInscribedRadius(mainTetrahedronInscribedRadius);
@@ -76,12 +76,14 @@ public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
         double intersectionPointZCord = 0;
         Point intersectionCenterPoint = new Point(intersectionPointXCord, intersectionPointYCord, intersectionPointZCord);
 
+        LineCalculator lineCalculator = new LineCalculatorImpl();
+
         double smallTetrahedronHeight;
 
         if (topPoint.getZCord() > 0) {
-            smallTetrahedronHeight = calculateDistanceBetweenPoints(topPoint, intersectionCenterPoint);
+            smallTetrahedronHeight = lineCalculator.calculateDistanceBetweenPoints(topPoint, intersectionCenterPoint);
         } else {
-            smallTetrahedronHeight = calculateDistanceBetweenPoints(baseCenterPoint, intersectionCenterPoint);
+            smallTetrahedronHeight = lineCalculator.calculateDistanceBetweenPoints(baseCenterPoint, intersectionCenterPoint);
         }
 
         return smallTetrahedronHeight;
@@ -115,25 +117,12 @@ public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
         return coefficient * inscribedRadius;
     }
 
-    public double calculateDistanceBetweenPoints(Point firstPoint, Point secondPoint) {
-        double firstPointXCord = firstPoint.getXCord();
-        double secondPointXCord = secondPoint.getXCord();
+    private double calculateInscribedRadius(Tetrahedron tetrahedron) {
+        Point baseTopPoint = tetrahedron.getBaseTopPoint();
+        Point baseCenterPoint = tetrahedron.getBaseCenterPoint();
 
-        double deltaX = firstPointXCord - secondPointXCord;
-        double squaredDeltaX = deltaX * deltaX;
+        LineCalculator lineCalculator = new LineCalculatorImpl();
 
-        double firstPointYCord = firstPoint.getYCord();
-        double secondPointYCord = secondPoint.getYCord();
-
-        double deltaY = firstPointYCord - secondPointYCord;
-        double squaredDeltaY = deltaY * deltaY;
-
-        double firstPointZCord = firstPoint.getZCord();
-        double secondPointZCord = secondPoint.getZCord();
-
-        double deltaZ = firstPointZCord - secondPointZCord;
-        double squaredDeltaZ = deltaZ * deltaZ;
-
-        return Math.sqrt(squaredDeltaX + squaredDeltaY + squaredDeltaZ);
+        return lineCalculator.calculateDistanceBetweenPoints(baseTopPoint, baseCenterPoint);
     }
 }
