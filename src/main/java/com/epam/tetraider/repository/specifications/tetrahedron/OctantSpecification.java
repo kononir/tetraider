@@ -26,15 +26,16 @@ public class OctantSpecification implements Specification<NumberedTetrahedron> {
                 tetrahedron.getBaseTopPoint()
         );
 
-        boolean answer = true;
+        boolean lieInOctant = false;
 
         for (Point point: points) {
-            if (xSpec.specified(point) && ySpec.specified(point) && zSpec.specified(point)) {
-                answer = false;
+            lieInOctant = xSpec.specified(point) && ySpec.specified(point) && zSpec.specified(point);
+
+            if (!lieInOctant) {
                 break;
             }
         }
 
-        return answer;
+        return lieInOctant;
     }
 }
