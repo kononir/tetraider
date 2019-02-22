@@ -1,5 +1,6 @@
-package com.epam.tetraider.logic;
+package com.epam.tetraider.data;
 
+import com.epam.tetraider.logic.LineCalculatorImpl;
 import com.epam.tetraider.logic.interfaces.LineCalculator;
 import com.epam.tetraider.logic.interfaces.PointsValidator;
 import com.epam.tetraider.model.Point;

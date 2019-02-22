@@ -9,21 +9,42 @@ public class LineCalculatorImpl implements LineCalculator {
         double firstPointXCord = firstPoint.getXCord();
         double secondPointXCord = secondPoint.getXCord();
 
-        double deltaX = firstPointXCord - secondPointXCord;
-        double squaredDeltaX = deltaX * deltaX;
+        double squaredDeltaX = calculateSquaredDelta(firstPointXCord, secondPointXCord);
 
         double firstPointYCord = firstPoint.getYCord();
         double secondPointYCord = secondPoint.getYCord();
 
-        double deltaY = firstPointYCord - secondPointYCord;
-        double squaredDeltaY = deltaY * deltaY;
+        double squaredDeltaY = calculateSquaredDelta(firstPointYCord, secondPointYCord);
 
         double firstPointZCord = firstPoint.getZCord();
         double secondPointZCord = secondPoint.getZCord();
 
-        double deltaZ = firstPointZCord - secondPointZCord;
-        double squaredDeltaZ = deltaZ * deltaZ;
+        double squaredDeltaZ = calculateSquaredDelta(firstPointZCord, secondPointZCord);
 
         return Math.sqrt(squaredDeltaX + squaredDeltaY + squaredDeltaZ);
+    }
+
+    @Override
+    public Point findCenterOfHorizontalLine(Point firstPoint, Point secondPoint) {
+        double xCord = firstPoint.getXCord();
+        double yCord = firstPoint.getYCord();
+
+        double vertical = calculateDistanceBetweenPoints(firstPoint, secondPoint);
+        double coefficient = 2;
+        double verticalHalf = vertical / coefficient;
+
+        double firstPointZCord = firstPoint.getZCord();
+        double secondPointZCord = secondPoint.getZCord();
+
+        boolean firstPointLiesBelow = (firstPointZCord < secondPointZCord);
+
+        double zCord = firstPointLiesBelow ? firstPointZCord + verticalHalf : firstPointZCord - verticalHalf;
+
+        return new Point(xCord, yCord, zCord);
+    }
+
+    private double calculateSquaredDelta(double firstPointCord, double secondPointCord) {
+        double delta = firstPointCord - secondPointCord;
+        return delta * delta;
     }
 }

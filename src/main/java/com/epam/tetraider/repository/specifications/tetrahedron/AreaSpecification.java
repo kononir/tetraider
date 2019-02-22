@@ -12,6 +12,7 @@ public class AreaSpecification implements Specification<NumberedTetrahedron> {
     public AreaSpecification(double desiredLowerArea, double desiredUpperArea, TetrahedronCalculator calculator) {
         this.desiredLowerArea = desiredLowerArea;
         this.desiredUpperArea = desiredUpperArea;
+        this.calculator = calculator;
     }
 
     @Override

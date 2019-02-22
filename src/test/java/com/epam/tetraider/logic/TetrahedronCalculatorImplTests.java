@@ -1,6 +1,5 @@
 package com.epam.tetraider.logic;
 
-import com.epam.tetraider.logic.TetrahedronCalculatorImpl;
 import com.epam.tetraider.logic.interfaces.TetrahedronCalculator;
 import com.epam.tetraider.model.Point;
 import com.epam.tetraider.model.Tetrahedron;
@@ -8,205 +7,116 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TetrahedronCalculatorImplTests {
+    private static final Tetrahedron AREA_VOLUME_TETRAHEDRON = new Tetrahedron(
+            new Point(0, 0, 6),
+            new Point(0, 0, 0),
+            new Point(2, 0, 0)
+    );
+
+    private static final Tetrahedron NON_ZERO_DISSECT_RATIO_TETRAHEDRON = new Tetrahedron(
+            new Point(5, 5, 3),
+            new Point(5, 5, -3),
+            new Point(9, 5, -3)
+    );
+
+    private static final Tetrahedron ABOVE_ZERO_DISSECT_RATIO_TETRAHEDRON = new Tetrahedron(
+            new Point(5, 5, 7),
+            new Point(5, 5, 1),
+            new Point(9, 5, 1)
+    );
+
+    private static final Tetrahedron BELOW_ZERO_DISSECT_RATIO_TETRAHEDRON = new Tetrahedron(
+            new Point(5, 5, -1),
+            new Point(5, 5, -7),
+            new Point(9, 5, -7)
+    );
+
+    private static final Tetrahedron LIEN_TETRAHEDRON = new Tetrahedron(
+            new Point(0, 5, 5),
+            new Point(5, 10, 0),
+            new Point(5, 5, 0)
+    );
+
+    private static final Tetrahedron NOT_LIEN_TETRAHEDRON = new Tetrahedron(
+            new Point(5, 5, 5),
+            new Point(5, 5, 5),
+            new Point(5, 5, 5)
+    );
+
+    private static final double EXPECTED_AREA = 20.78;
+    private static final double EXPECTED_VOLUME = 5.19;
+    private static final double EXPECTED_NON_ZERO_DISSECT_RATIO = 0.14;
+    private static final double EXPECTED_ZERO_DISSECT_RATIO = 0;
+
+    private static final double DELTA = 0.01;
+
     @Test
-    public void testCalculateSquareShouldReturnTwentyWhenInscribedRadiusEqualsTwo() {
+    public void testCalculateAreaShouldReturnTwentyWhenInscribedRadiusEqualsTwo() {
         // given
-        double topPointXCord = 0;
-        double topPointYCord = 0;
-        double topPointZCord = 6;
-
-        Point topPoint = new Point(topPointXCord, topPointYCord, topPointZCord);
-
-        double baseCenterPointXCord = 0;
-        double baseCenterPointYCord = 0;
-        double baseCenterPointZCord = 0;
-
-        Point baseCenterPoint = new Point(baseCenterPointXCord, baseCenterPointYCord, baseCenterPointZCord);
-
-        double baseTopPointXCord = 2;
-        double baseTopPointYCord = 0;
-        double baseTopPointZCord = 0;
-
-        Point baseTopPoint = new Point(baseTopPointXCord, baseTopPointYCord, baseTopPointZCord);
-
-        Tetrahedron tetrahedron = new Tetrahedron(topPoint, baseCenterPoint, baseTopPoint);
-
-        double expected = 20.78;
-        double delta = 0.01;
-
         TetrahedronCalculator tetrahedronCalculator = new TetrahedronCalculatorImpl();
 
         // when
-        double actual = tetrahedronCalculator.calculateSurfaceArea(tetrahedron);
+        double actual = tetrahedronCalculator.calculateSurfaceArea(AREA_VOLUME_TETRAHEDRON);
 
         // then
-        Assert.assertEquals(expected, actual, delta);
+        Assert.assertEquals(EXPECTED_AREA, actual, DELTA);
     }
 
     @Test
     public void testCalculateVolumeShouldReturnFiveWhenInscribedRadiusEqualsTwo() {
         // given
-        double topPointXCord = 0;
-        double topPointYCord = 0;
-        double topPointZCord = 6;
-
-        Point topPoint = new Point(topPointXCord, topPointYCord, topPointZCord);
-
-        double baseCenterPointXCord = 0;
-        double baseCenterPointYCord = 0;
-        double baseCenterPointZCord = 0;
-
-        Point baseCenterPoint = new Point(baseCenterPointXCord, baseCenterPointYCord, baseCenterPointZCord);
-
-        double baseTopPointXCord = 2;
-        double baseTopPointYCord = 0;
-        double baseTopPointZCord = 0;
-
-        Point baseTopPoint = new Point(baseTopPointXCord, baseTopPointYCord, baseTopPointZCord);
-
-        Tetrahedron tetrahedron = new Tetrahedron(topPoint, baseCenterPoint, baseTopPoint);
-
-        double expected = 5.19;
-        double delta = 0.01;
-
         TetrahedronCalculator tetrahedronCalculator = new TetrahedronCalculatorImpl();
 
         // when
-        double actual = tetrahedronCalculator.calculateVolume(tetrahedron);
+        double actual = tetrahedronCalculator.calculateVolume(AREA_VOLUME_TETRAHEDRON);
 
         // then
-        Assert.assertEquals(expected, actual, delta);
+        Assert.assertEquals(EXPECTED_VOLUME, actual, DELTA);
     }
 
     @Test
     public void testCalculateFigureDissectRatioShouldReturnFourteenTenthsWhenHeightLengthIsSixAndCoordinatesPlaneLiesAtCenter() {
-        double topPointXCord = 5.0;
-        double topPointYCord = 5.0;
-        double topPointZCord = 3.0;
-
-        Point topPoint = new Point(topPointXCord, topPointYCord, topPointZCord);
-
-        double baseCenterPointXCord = 5.0;
-        double baseCenterPointYCord = 5.0;
-        double baseCenterPointZCord = -3.0;
-
-        Point baseCenterPoint = new Point(baseCenterPointXCord, baseCenterPointYCord, baseCenterPointZCord);
-
-        double baseTopPointXCord = 9.0;
-        double baseTopPointYCord = 5.0;
-        double baseTopPointZCord = -3.0;
-
-        Point baseTopPoint = new Point(baseTopPointXCord, baseTopPointYCord, baseTopPointZCord);
-
-        Tetrahedron tetrahedron = new Tetrahedron(topPoint, baseCenterPoint, baseTopPoint);
-
-        double expected = 0.14;
-        double delta = 0.01;
-
+        // given
         TetrahedronCalculator tetrahedronCalculator = new TetrahedronCalculatorImpl();
 
         // when
-        double actual = tetrahedronCalculator.calculateFigureDissectRatio(tetrahedron);
+        double actual = tetrahedronCalculator.calculateFigureDissectRatio(NON_ZERO_DISSECT_RATIO_TETRAHEDRON);
 
         // then
-        Assert.assertEquals(expected, actual, delta);
+        Assert.assertEquals(EXPECTED_NON_ZERO_DISSECT_RATIO, actual, DELTA);
     }
 
     @Test
     public void testCalculateFigureDissectRatioShouldReturnZeroWhenTetrahedronLiesAboveCoordinatesPlane() {
-        double topPointXCord = 5.0;
-        double topPointYCord = 5.0;
-        double topPointZCord = 7.0;
-
-        Point topPoint = new Point(topPointXCord, topPointYCord, topPointZCord);
-
-        double baseCenterPointXCord = 5.0;
-        double baseCenterPointYCord = 5.0;
-        double baseCenterPointZCord = 1.0;
-
-        Point baseCenterPoint = new Point(baseCenterPointXCord, baseCenterPointYCord, baseCenterPointZCord);
-
-        double baseTopPointXCord = 9.0;
-        double baseTopPointYCord = 5.0;
-        double baseTopPointZCord = 1.0;
-
-        Point baseTopPoint = new Point(baseTopPointXCord, baseTopPointYCord, baseTopPointZCord);
-
-        Tetrahedron tetrahedron = new Tetrahedron(topPoint, baseCenterPoint, baseTopPoint);
-
-        double expected = 0;
-        double delta = 0.01;
-
+        // given
         TetrahedronCalculator tetrahedronCalculator = new TetrahedronCalculatorImpl();
 
         // when
-        double actual = tetrahedronCalculator.calculateFigureDissectRatio(tetrahedron);
+        double actual = tetrahedronCalculator.calculateFigureDissectRatio(ABOVE_ZERO_DISSECT_RATIO_TETRAHEDRON);
 
         // then
-        Assert.assertEquals(expected, actual, delta);
+        Assert.assertEquals(EXPECTED_ZERO_DISSECT_RATIO, actual, DELTA);
     }
 
     @Test
     public void testCalculateFigureDissectRatioShouldReturnZeroWhenTetrahedronBelowCoordinatesPlane() {
-        double topPointXCord = 5.0;
-        double topPointYCord = 5.0;
-        double topPointZCord = -1.0;
-
-        Point topPoint = new Point(topPointXCord, topPointYCord, topPointZCord);
-
-        double baseCenterPointXCord = 5.0;
-        double baseCenterPointYCord = 5.0;
-        double baseCenterPointZCord = -7.0;
-
-        Point baseCenterPoint = new Point(baseCenterPointXCord, baseCenterPointYCord, baseCenterPointZCord);
-
-        double baseTopPointXCord = 9.0;
-        double baseTopPointYCord = 5.0;
-        double baseTopPointZCord = -7.0;
-
-        Point baseTopPoint = new Point(baseTopPointXCord, baseTopPointYCord, baseTopPointZCord);
-
-        Tetrahedron tetrahedron = new Tetrahedron(topPoint, baseCenterPoint, baseTopPoint);
-
-        double expected = 0;
-        double delta = 0.01;
-
+        // given
         TetrahedronCalculator tetrahedronCalculator = new TetrahedronCalculatorImpl();
 
         // when
-        double actual = tetrahedronCalculator.calculateFigureDissectRatio(tetrahedron);
+        double actual = tetrahedronCalculator.calculateFigureDissectRatio(BELOW_ZERO_DISSECT_RATIO_TETRAHEDRON);
 
         // then
-        Assert.assertEquals(expected, actual, delta);
+        Assert.assertEquals(EXPECTED_ZERO_DISSECT_RATIO, actual, DELTA);
     }
 
     @Test
     public void testIsBaseLiesAtCoordinatePlaneShouldReturnTrueWhenGivenTetrahedronBasePointsHaveZeroCoordinatesInSimilarPlane() {
         // given
-        double topPointXCord = 0.0;
-        double topPointYCord = 5.0;
-        double topPointZCord = 5.0;
-
-        Point topPoint = new Point(topPointXCord, topPointYCord, topPointZCord);
-
-        double baseCenterPointXCord = 5.0;
-        double baseCenterPointYCord = 10.0;
-        double baseCenterPointZCord = 0.0;
-
-        Point baseCenterPoint = new Point(baseCenterPointXCord, baseCenterPointYCord, baseCenterPointZCord);
-
-        double baseTopPointXCord = 5.0;
-        double baseTopPointYCord = 5.0;
-        double baseTopPointZCord = 0.0;
-
-        Point baseTopPoint = new Point(baseTopPointXCord, baseTopPointYCord, baseTopPointZCord);
-
-        Tetrahedron tetrahedron = new Tetrahedron(topPoint, baseCenterPoint, baseTopPoint);
-
         TetrahedronCalculator tetrahedronCalculator = new TetrahedronCalculatorImpl();
 
         // when
-        boolean actual = tetrahedronCalculator.isBaseLiesAtCoordinatePlane(tetrahedron);
+        boolean actual = tetrahedronCalculator.isBaseLiesAtCoordinatePlane(LIEN_TETRAHEDRON);
 
         // then
         Assert.assertTrue(actual);
@@ -215,18 +125,10 @@ public class TetrahedronCalculatorImplTests {
     @Test
     public void testIsBaseLiesAtCoordinatePlaneShouldReturnFalseWhenGivenTetrahedronBasePointsNotHaveZeroCoordinatesInSimilarPlane() {
         // given
-        double pointCord = 5.0;
-
-        Point topPoint = new Point(pointCord, pointCord, pointCord);
-        Point baseCenterPoint = new Point(pointCord, pointCord, pointCord);
-        Point baseTopPoint = new Point(pointCord, pointCord, pointCord);
-
-        Tetrahedron tetrahedron = new Tetrahedron(topPoint, baseCenterPoint, baseTopPoint);
-
         TetrahedronCalculator tetrahedronCalculator = new TetrahedronCalculatorImpl();
 
         // when
-        boolean actual = tetrahedronCalculator.isBaseLiesAtCoordinatePlane(tetrahedron);
+        boolean actual = tetrahedronCalculator.isBaseLiesAtCoordinatePlane(NOT_LIEN_TETRAHEDRON);
 
         // then
         Assert.assertFalse(actual);

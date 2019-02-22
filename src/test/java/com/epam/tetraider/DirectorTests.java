@@ -3,179 +3,188 @@ package com.epam.tetraider;
 import com.epam.tetraider.data.DataParserImpl;
 import com.epam.tetraider.data.DataReaderImpl;
 import com.epam.tetraider.data.DataValidatorImpl;
-import com.epam.tetraider.exceptions.FileIsEmptyException;
-import com.epam.tetraider.exceptions.IllegalFileNameException;
+import com.epam.tetraider.data.PointsValidatorImpl;
 import com.epam.tetraider.data.interfaces.DataParser;
 import com.epam.tetraider.data.interfaces.DataReader;
 import com.epam.tetraider.data.interfaces.DataValidator;
+import com.epam.tetraider.exceptions.FileIsEmptyException;
+import com.epam.tetraider.exceptions.IllegalFileNameException;
 import com.epam.tetraider.exceptions.ReadingProblemsException;
-import com.epam.tetraider.logic.PointsValidatorImpl;
+import com.epam.tetraider.generator.IncrementalGenerator;
+import com.epam.tetraider.generator.interfaces.Generator;
 import com.epam.tetraider.logic.interfaces.PointsValidator;
+import com.epam.tetraider.model.NumberedTetrahedron;
 import com.epam.tetraider.model.Point;
 import com.epam.tetraider.model.Tetrahedron;
-import org.junit.Assert;
+import com.epam.tetraider.repository.interfaces.Repository;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class DirectorTests {
+    private static final String VALID_PATH_WITH_TETRAHEDRON = "src/test/resources/valid.txt";
+    private static final String VALID_PATH_WITH_INVALID_DATA = "src/test/resources/invalid.txt";
+    private static final String INVALID_PATH = "invalid path!";
+    private static final String VALID_PATH_EMPTY_FILE = "src/test/resources/empty.txt";
+
+    private static final String VALID_LINE = "5 5 5 5 5 2 3 5 2";
+    private static final String INVALID_LINE = "Letter";
+
+    private static final List<String> VALID_LINES = Collections.singletonList(VALID_LINE);
+    private static final List<String> INVALID_LINES = Collections.singletonList(INVALID_LINE);
+
+    private static final Point TOP_POINT = new Point(5, 5, 5);
+    private static final Point BASE_CENTER_POINT = new Point(5, 5, 2);
+    private static final Point BASE_TOP_POINT = new Point(3, 5, 2);
+
+    private static final List<Point> VALID_POINTS = Arrays.asList(
+            TOP_POINT,
+            BASE_CENTER_POINT,
+            BASE_TOP_POINT
+    );
+
+    private static final Integer ZERO_ID = 0;
+
+    private static final NumberedTetrahedron TETRAHEDRON = new NumberedTetrahedron(
+            ZERO_ID,
+            TOP_POINT,
+            BASE_CENTER_POINT,
+            BASE_TOP_POINT
+    );
+
+    private static final int ONE_INVOCATION = 1;
+
     @Test
-    public void testManageLoadingTetrahedronsReturnListWithOneTetrahedron() throws IllegalFileNameException,
+    public void testManageLoadingTetrahedronsReturnRepositoryWithOneTetrahedron() throws IllegalFileNameException,
             FileIsEmptyException, ReadingProblemsException {
         // given
         DataReader dataReader = mock(DataReaderImpl.class);
 
-        String path = "src/test/resources/valid.txt";
-
-        String line = "5 5 5 5 5 2 3 5 2";
-        List<String> lines = Collections.singletonList(line);
-
-        when(dataReader.readFile(path)).thenReturn(lines);
+        when(dataReader.readFile(VALID_PATH_WITH_TETRAHEDRON)).thenReturn(VALID_LINES);
 
         DataValidator dataValidator = mock(DataValidatorImpl.class);
-        when(dataValidator.isValidLine(line)).thenReturn(true);
+        when(dataValidator.isValidLine(VALID_LINE)).thenReturn(true);
 
         DataParser dataParser = mock(DataParserImpl.class);
 
-        final double fiveCord = 5;
-        final double twoCord = 2;
-        final double threeCord = 3;
-
-        Point topPoint = new Point(fiveCord, fiveCord, fiveCord);
-        Point baseCenterPoint = new Point(fiveCord, fiveCord, twoCord);
-        Point baseTopPoint = new Point(threeCord, fiveCord, twoCord);
-
-        final List<Point> points = Arrays.asList(topPoint, baseCenterPoint, baseTopPoint);
-
-        when(dataParser.parse(line)).thenReturn(points);
+        when(dataParser.parse(VALID_LINE)).thenReturn(VALID_POINTS);
 
         PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
-        when(pointsValidator.isValidPoints(topPoint, baseCenterPoint, baseTopPoint)).thenReturn(true);
+        when(pointsValidator.isValidPoints(TOP_POINT, BASE_CENTER_POINT, BASE_TOP_POINT)).thenReturn(true);
 
-        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator);
+        Generator<Integer> generator = mock(IncrementalGenerator.class);
+        when(generator.generateNext()).thenReturn(ZERO_ID);
 
-        Tetrahedron tetrahedron = new Tetrahedron(topPoint, baseCenterPoint, baseTopPoint);
-        List<Tetrahedron> expected = Collections.singletonList(tetrahedron);
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, generator);
 
         // when
-        List<Tetrahedron> actual = director.manageLoadingTetrahedrons(path);
+        Repository<NumberedTetrahedron> actual = director.manageLoadingTetrahedrons(VALID_PATH_WITH_TETRAHEDRON);
 
         // then
-        Assert.assertEquals(expected, actual);
+        // вставить проверку на добавление в репозиторий тетраэдров
 
-        int numberOfInvocation = 1;
-
-        verify(dataReader, times(numberOfInvocation)).readFile(anyString());
-        verify(dataValidator, times(numberOfInvocation)).isValidLine(line);
-        verify(dataParser, times(numberOfInvocation)).parse(anyString());
-        verify(pointsValidator, times(numberOfInvocation)).isValidPoints(topPoint, baseCenterPoint, baseTopPoint);
+        verify(dataReader, times(ONE_INVOCATION)).readFile(anyString());
+        verify(dataValidator, times(ONE_INVOCATION)).isValidLine(VALID_LINE);
+        verify(dataParser, times(ONE_INVOCATION)).parse(anyString());
+        verify(pointsValidator, times(ONE_INVOCATION)).isValidPoints(TOP_POINT, BASE_CENTER_POINT, BASE_TOP_POINT);
+        verify(generator, times(ONE_INVOCATION)).generateNext();
     }
 
     @Test
-    public void testManageLoadingTetrahedronsReturnEmptyListWhenDataIsInvalid() throws IllegalFileNameException,
+    public void testManageLoadingTetrahedronsReturnEmptyRepositoryWhenDataIsInvalid() throws IllegalFileNameException,
             FileIsEmptyException, ReadingProblemsException {
         // given
         DataReader dataReader = mock(DataReaderImpl.class);
 
-        String path = "src/test/resources/invalid.txt";
-
-        String line = "Letter";
-        List<String> lines = Collections.singletonList(line);
-
-        when(dataReader.readFile(path)).thenReturn(lines);
+        when(dataReader.readFile(VALID_PATH_WITH_INVALID_DATA)).thenReturn(INVALID_LINES);
 
         DataValidator dataValidator = mock(DataValidatorImpl.class);
-        when(dataValidator.isValidLine(line)).thenReturn(false);
+        when(dataValidator.isValidLine(INVALID_LINE)).thenReturn(false);
 
         DataParser dataParser = mock(DataParserImpl.class);
-
         PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
+        Generator<Integer> generator = mock(IncrementalGenerator.class);
 
-        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator);
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, generator);
 
         List<Tetrahedron> expected = Collections.emptyList();
 
         // when
-        List<Tetrahedron> actual = director.manageLoadingTetrahedrons(path);
+        director.manageLoadingTetrahedrons(VALID_PATH_WITH_INVALID_DATA);
 
         // then
-        Assert.assertEquals(expected, actual);
+        // вставить проверку на добавление в репозиторий тетраэдров
 
-        int numberOfInvocation = 1;
-
-        verify(dataReader, times(numberOfInvocation)).readFile(anyString());
-        verify(dataValidator, times(numberOfInvocation)).isValidLine(line);
+        verify(dataReader, times(ONE_INVOCATION)).readFile(anyString());
+        verify(dataValidator, times(ONE_INVOCATION)).isValidLine(INVALID_LINE);
 
         verify(dataParser, never()).parse(anyString());
-        verify(pointsValidator, never()).isValidPoints((Point) anyObject(), (Point) anyObject(), (Point) anyObject());
+        verify(pointsValidator, never()).isValidPoints(anyObject(), anyObject(), anyObject());
     }
 
     @Test
-    public void testManageLoadingTetrahedronsReturnEmptyListWhenIllegalFileName() throws IllegalFileNameException,
+    public void testManageLoadingTetrahedronsReturnEmptyRepositoryWhenIllegalFileName() throws IllegalFileNameException,
             FileIsEmptyException, ReadingProblemsException {
         // given
         DataReader dataReader = mock(DataReaderImpl.class);
 
-        String path = "illegal file name!";
-        when(dataReader.readFile(path)).thenThrow(new IllegalFileNameException());
+        when(dataReader.readFile(INVALID_PATH)).thenThrow(new IllegalFileNameException());
 
         DataValidator dataValidator = mock(DataValidatorImpl.class);
         DataParser dataParser = mock(DataParserImpl.class);
         PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
+        Generator<Integer> generator = mock(IncrementalGenerator.class);
 
-        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator);
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, generator);
 
         List<Tetrahedron> expected = Collections.emptyList();
 
         // when
-        List<Tetrahedron> actual = director.manageLoadingTetrahedrons(path);
+        director.manageLoadingTetrahedrons(INVALID_PATH);
 
         // then
-        Assert.assertEquals(expected, actual);
+        // вставить проверку на добавление в репозиторий тетраэдров
 
-        int numberOfInvocation = 1;
-
-        verify(dataReader, times(numberOfInvocation)).readFile(anyString());
+        verify(dataReader, times(ONE_INVOCATION)).readFile(anyString());
 
         verify(dataValidator, never()).isValidLine(anyString());
         verify(dataParser, never()).parse(anyString());
-        verify(pointsValidator, never()).isValidPoints((Point) anyObject(), (Point) anyObject(), (Point) anyObject());
+        verify(pointsValidator, never()).isValidPoints(anyObject(), anyObject(), anyObject());
     }
 
     @Test
-    public void testManageLoadingTetrahedronsReturnEmptyListWhenFileIsEmpty() throws IllegalFileNameException,
+    public void testManageLoadingTetrahedronsReturnEmptyRepositoryWhenFileIsEmpty() throws IllegalFileNameException,
             FileIsEmptyException, ReadingProblemsException {
         // given
         DataReader dataReader = mock(DataReaderImpl.class);
 
-        String path = "empty file";
-        when(dataReader.readFile(path)).thenThrow(new FileIsEmptyException());
+        when(dataReader.readFile(VALID_PATH_EMPTY_FILE)).thenThrow(new FileIsEmptyException());
 
         DataValidator dataValidator = mock(DataValidatorImpl.class);
         DataParser dataParser = mock(DataParserImpl.class);
         PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
+        Generator<Integer> generator = mock(IncrementalGenerator.class);
 
-        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator);
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, generator);
 
         List<Tetrahedron> expected = Collections.emptyList();
 
         // when
-        List<Tetrahedron> actual = director.manageLoadingTetrahedrons(path);
+        director.manageLoadingTetrahedrons(VALID_PATH_EMPTY_FILE);
 
         // then
-        Assert.assertEquals(expected, actual);
+        // вставить проверку на добавление в репозиторий тетраэдров
 
-        int numberOfInvocation = 1;
-
-        verify(dataReader, times(numberOfInvocation)).readFile(anyString());
+        verify(dataReader, times(ONE_INVOCATION)).readFile(anyString());
 
         verify(dataValidator, never()).isValidLine(anyString());
         verify(dataParser, never()).parse(anyString());
-        verify(pointsValidator, never()).isValidPoints((Point) anyObject(), (Point) anyObject(), (Point) anyObject());
+        verify(pointsValidator, never()).isValidPoints(anyObject(), anyObject(), anyObject());
     }
 }

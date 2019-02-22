@@ -12,6 +12,7 @@ public class VolumeSpecification implements Specification<NumberedTetrahedron> {
     public VolumeSpecification(double desiredLowerVolume, double desiredUpperVolume, TetrahedronCalculator calculator) {
         this.desiredLowerVolume = desiredLowerVolume;
         this.desiredUpperVolume = desiredUpperVolume;
+        this.calculator = calculator;
     }
 
     @Override
