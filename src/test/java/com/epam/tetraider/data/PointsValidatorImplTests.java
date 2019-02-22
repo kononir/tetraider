@@ -1,6 +1,5 @@
 package com.epam.tetraider.data;
 
-import com.epam.tetraider.data.PointsValidatorImpl;
 import com.epam.tetraider.logic.interfaces.PointsValidator;
 import com.epam.tetraider.model.Point;
 import org.junit.Assert;

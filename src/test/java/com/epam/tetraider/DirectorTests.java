@@ -15,7 +15,7 @@ import com.epam.tetraider.generator.interfaces.Generator;
 import com.epam.tetraider.logic.interfaces.PointsValidator;
 import com.epam.tetraider.model.NumberedTetrahedron;
 import com.epam.tetraider.model.Point;
-import com.epam.tetraider.model.Tetrahedron;
+import com.epam.tetraider.repository.TetrahedronRepository;
 import com.epam.tetraider.repository.interfaces.Repository;
 import org.junit.Test;
 
@@ -78,21 +78,23 @@ public class DirectorTests {
         PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
         when(pointsValidator.isValidPoints(TOP_POINT, BASE_CENTER_POINT, BASE_TOP_POINT)).thenReturn(true);
 
+        Repository<NumberedTetrahedron> repository = spy(new TetrahedronRepository());
+
         Generator<Integer> generator = mock(IncrementalGenerator.class);
         when(generator.generateNext()).thenReturn(ZERO_ID);
 
-        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, generator);
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, repository, generator);
 
         // when
-        Repository<NumberedTetrahedron> actual = director.manageLoadingTetrahedrons(VALID_PATH_WITH_TETRAHEDRON);
+        director.manageLoadingTetrahedrons(VALID_PATH_WITH_TETRAHEDRON);
 
         // then
-        // вставить проверку на добавление в репозиторий тетраэдров
-
         verify(dataReader, times(ONE_INVOCATION)).readFile(anyString());
         verify(dataValidator, times(ONE_INVOCATION)).isValidLine(VALID_LINE);
         verify(dataParser, times(ONE_INVOCATION)).parse(anyString());
         verify(pointsValidator, times(ONE_INVOCATION)).isValidPoints(TOP_POINT, BASE_CENTER_POINT, BASE_TOP_POINT);
+
+        verify(repository, times(ONE_INVOCATION)).add(TETRAHEDRON);
         verify(generator, times(ONE_INVOCATION)).generateNext();
     }
 
@@ -111,21 +113,22 @@ public class DirectorTests {
         PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
         Generator<Integer> generator = mock(IncrementalGenerator.class);
 
-        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, generator);
+        Repository<NumberedTetrahedron> repository = spy(new TetrahedronRepository());
 
-        List<Tetrahedron> expected = Collections.emptyList();
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, repository, generator);
 
         // when
         director.manageLoadingTetrahedrons(VALID_PATH_WITH_INVALID_DATA);
 
         // then
-        // вставить проверку на добавление в репозиторий тетраэдров
-
         verify(dataReader, times(ONE_INVOCATION)).readFile(anyString());
         verify(dataValidator, times(ONE_INVOCATION)).isValidLine(INVALID_LINE);
 
         verify(dataParser, never()).parse(anyString());
         verify(pointsValidator, never()).isValidPoints(anyObject(), anyObject(), anyObject());
+
+        verify(repository, never()).add(anyObject());
+        verify(generator, never()).generateNext();
     }
 
     @Test
@@ -141,21 +144,22 @@ public class DirectorTests {
         PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
         Generator<Integer> generator = mock(IncrementalGenerator.class);
 
-        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, generator);
+        Repository<NumberedTetrahedron> repository = spy(new TetrahedronRepository());
 
-        List<Tetrahedron> expected = Collections.emptyList();
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, repository, generator);
 
         // when
         director.manageLoadingTetrahedrons(INVALID_PATH);
 
         // then
-        // вставить проверку на добавление в репозиторий тетраэдров
-
         verify(dataReader, times(ONE_INVOCATION)).readFile(anyString());
 
         verify(dataValidator, never()).isValidLine(anyString());
         verify(dataParser, never()).parse(anyString());
         verify(pointsValidator, never()).isValidPoints(anyObject(), anyObject(), anyObject());
+
+        verify(repository, never()).add(anyObject());
+        verify(generator, never()).generateNext();
     }
 
     @Test
@@ -171,9 +175,9 @@ public class DirectorTests {
         PointsValidator pointsValidator = mock(PointsValidatorImpl.class);
         Generator<Integer> generator = mock(IncrementalGenerator.class);
 
-        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, generator);
+        Repository<NumberedTetrahedron> repository = spy(new TetrahedronRepository());
 
-        List<Tetrahedron> expected = Collections.emptyList();
+        Director director = new Director(dataReader, dataValidator, dataParser, pointsValidator, repository, generator);
 
         // when
         director.manageLoadingTetrahedrons(VALID_PATH_EMPTY_FILE);
@@ -186,5 +190,8 @@ public class DirectorTests {
         verify(dataValidator, never()).isValidLine(anyString());
         verify(dataParser, never()).parse(anyString());
         verify(pointsValidator, never()).isValidPoints(anyObject(), anyObject(), anyObject());
+
+        verify(repository, never()).add(anyObject());
+        verify(generator, never()).generateNext();
     }
 }

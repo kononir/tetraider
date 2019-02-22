@@ -1,4 +1,4 @@
-package com.epam.tetraider.repository.specifications;
+package com.epam.tetraider.repository.specifications.tetrahedron;
 
 import com.epam.tetraider.logic.TetrahedronCalculatorImpl;
 import com.epam.tetraider.logic.interfaces.TetrahedronCalculator;
@@ -9,8 +9,8 @@ import com.epam.tetraider.repository.specifications.tetrahedron.VolumeSpecificat
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
 
 public class VolumeSpecificationTests {
     private static final NumberedTetrahedron TETRAHEDRON = new NumberedTetrahedron(
@@ -38,6 +38,8 @@ public class VolumeSpecificationTests {
 
         // then
         Assert.assertTrue(actual);
+
+        verify(calculator, atLeastOnce()).calculateVolume(TETRAHEDRON);
     }
 
     @Test
@@ -53,5 +55,7 @@ public class VolumeSpecificationTests {
 
         // then
         Assert.assertFalse(actual);
+
+        verify(calculator, atLeastOnce()).calculateVolume(TETRAHEDRON);
     }
 }

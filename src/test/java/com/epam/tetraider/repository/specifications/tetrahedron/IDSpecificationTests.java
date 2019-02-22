@@ -1,4 +1,4 @@
-package com.epam.tetraider.repository.specifications;
+package com.epam.tetraider.repository.specifications.tetrahedron;
 
 import com.epam.tetraider.model.NumberedTetrahedron;
 import com.epam.tetraider.model.Point;

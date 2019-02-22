@@ -1,4 +1,4 @@
-package com.epam.tetraider.sorting.comparators.id;
+package com.epam.tetraider.sorting.comparators.tetrahedron.id;
 
 import com.epam.tetraider.model.NumberedTetrahedron;
 import com.epam.tetraider.model.Point;

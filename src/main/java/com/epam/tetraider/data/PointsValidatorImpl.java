@@ -8,7 +8,7 @@ import com.epam.tetraider.model.Point;
 public class PointsValidatorImpl implements PointsValidator {
     @Override
     public boolean isValidPoints(Point topPoint, Point baseCenterPoint, Point baseTopPoint) {
-        return !isNonEqualsPoints(topPoint, baseCenterPoint, baseTopPoint)
+        return isNonEqualsPoints(topPoint, baseCenterPoint, baseTopPoint)
                 && isBasePointsLiesHorizontal(baseCenterPoint, baseTopPoint)
                 && isHeightPointsLiesVertical(topPoint, baseCenterPoint)
                 && isConsistentPoints(topPoint, baseCenterPoint, baseTopPoint);

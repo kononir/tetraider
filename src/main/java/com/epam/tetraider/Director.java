@@ -11,7 +11,6 @@ import com.epam.tetraider.generator.interfaces.Generator;
 import com.epam.tetraider.logic.interfaces.PointsValidator;
 import com.epam.tetraider.model.NumberedTetrahedron;
 import com.epam.tetraider.model.Point;
-import com.epam.tetraider.repository.TetrahedronRepository;
 import com.epam.tetraider.repository.interfaces.Repository;
 import org.apache.log4j.Logger;
 
@@ -23,23 +22,24 @@ public class Director {
     private DataValidator dataValidator;
     private PointsValidator pointsValidator;
 
+    private Repository<NumberedTetrahedron> repository;
     private Generator<Integer> generator;
 
     private static final Logger LOGGER = Logger.getLogger(Director.class);
 
     public Director(DataReader reader, DataValidator dataValidator, DataParser parser,
-                    PointsValidator pointsValidator, Generator<Integer> generator) {
+                    PointsValidator pointsValidator, Repository<NumberedTetrahedron> repository,
+                    Generator<Integer> generator) {
         this.reader = reader;
         this.parser = parser;
         this.dataValidator = dataValidator;
         this.pointsValidator = pointsValidator;
 
+        this.repository = repository;
         this.generator = generator;
     }
 
-    public Repository<NumberedTetrahedron> manageLoadingTetrahedrons(String filePath) {
-        Repository<NumberedTetrahedron> repository = new TetrahedronRepository();
-
+    public void manageLoadingTetrahedrons(String filePath) {
         int numOfValidLines = 0;
 
         try {
@@ -88,7 +88,5 @@ public class Director {
 
             e.printStackTrace();
         }
-
-        return repository;
     }
 }

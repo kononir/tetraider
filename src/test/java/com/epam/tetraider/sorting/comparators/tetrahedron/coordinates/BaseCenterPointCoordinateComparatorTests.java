@@ -1,10 +1,8 @@
-package com.epam.tetraider.sorting.comparators.coordinates;
+package com.epam.tetraider.sorting.comparators.tetrahedron.coordinates;
 
 import com.epam.tetraider.model.NumberedTetrahedron;
 import com.epam.tetraider.model.Point;
 import com.epam.tetraider.sorting.comparators.point.PointXComparator;
-import com.epam.tetraider.sorting.comparators.tetrahedron.coordinates.BaseCenterPointCoordinateComparator;
-import com.epam.tetraider.sorting.comparators.tetrahedron.coordinates.BaseTopPointCoordinateComparator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,15 +18,15 @@ public class BaseCenterPointCoordinateComparatorTests {
     private static final NumberedTetrahedron TWO_TETRAHEDRON = new NumberedTetrahedron(
             0,
             new Point(0, 0, 0),
-            new Point(0, 0, 0),
-            TWO_POINT
+            TWO_POINT,
+            new Point(0, 0, 0)
     );
 
     private static final NumberedTetrahedron ONE_TETRAHEDRON = new NumberedTetrahedron(
             0,
             new Point(0, 0, 0),
-            new Point(0, 0, 0),
-            ONE_POINT
+            ONE_POINT,
+            new Point(0, 0, 0)
     );
 
     private static final int GREATER = 1;

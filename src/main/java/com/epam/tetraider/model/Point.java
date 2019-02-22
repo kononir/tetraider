@@ -42,9 +42,9 @@ public class Point {
 
         double delta = 0.01;
 
-        return point.xCord - xCord <= delta
-                && point.yCord - yCord <= delta
-                && point.zCord - zCord <= delta;
+        return Math.abs(point.xCord - xCord) <= delta
+                && Math.abs(point.yCord - yCord) <= delta
+                && Math.abs(point.zCord - zCord) <= delta;
     }
 
     @Override
