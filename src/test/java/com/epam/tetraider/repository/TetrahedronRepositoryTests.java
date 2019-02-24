@@ -7,7 +7,9 @@ import com.epam.tetraider.repository.specifications.tetrahedron.OctantSpecificat
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -21,69 +23,58 @@ public class TetrahedronRepositoryTests {
             new Point(1, 1, 1)
     );
 
-    private final static int ONE_ELEMENT = 1;
-
-    private final static int FIRST_INDEX = 0;
-
-    private final static double COORDINATE = 1;
-    private final static double DELTA = 0.01;
-
-    private final static int ONE_INVOCATION = 1;
+    private final static int ONE_TETRAHEDRON = 1;
 
     @Test
-    public void testQueryShouldReturnOneTetrahedronWhenSpecifiedGiveTrue() {
-        // given
-        Specification<NumberedTetrahedron> specification = mock(OctantSpecification.class);
-        when(specification.specified(TETRAHEDRON)).thenReturn(true);
-
-        TetrahedronRepository repository = new TetrahedronRepository();
-
-        repository.add(TETRAHEDRON);
-
-        // when
-        List<NumberedTetrahedron> tetrahedronList = repository.query(specification);
-
-        // then
-        Assert.assertEquals(ONE_ELEMENT, tetrahedronList.size());
-
-        NumberedTetrahedron actual = tetrahedronList.get(FIRST_INDEX);
-
-        Assert.assertEquals(ID, actual.getId());
-
-        Point topPoint = actual.getTopPoint();
-        Assert.assertEquals(COORDINATE, topPoint.getXCord(), DELTA);
-        Assert.assertEquals(COORDINATE, topPoint.getYCord(), DELTA);
-        Assert.assertEquals(COORDINATE, topPoint.getZCord(), DELTA);
-
-        Point baseTopPoint = actual.getBaseTopPoint();
-        Assert.assertEquals(COORDINATE, baseTopPoint.getXCord(), DELTA);
-        Assert.assertEquals(COORDINATE, baseTopPoint.getYCord(), DELTA);
-        Assert.assertEquals(COORDINATE, baseTopPoint.getZCord(), DELTA);
-
-        Point baseCenterPoint = actual.getBaseCenterPoint();
-        Assert.assertEquals(COORDINATE, baseCenterPoint.getXCord(), DELTA);
-        Assert.assertEquals(COORDINATE, baseCenterPoint.getYCord(), DELTA);
-        Assert.assertEquals(COORDINATE, baseCenterPoint.getZCord(), DELTA);
-
-        verify(specification, times(ONE_INVOCATION)).specified(TETRAHEDRON);
-    }
-
-    @Test
-    public void testQueryShouldReturnNoneTetrahedronsWhenSpecifiedGiveFalse() {
+    public void testQueryShouldReturnNoneTetrahedronsWhenRepositoryIsEmpty() {
         // given
         Specification<NumberedTetrahedron> specification = mock(OctantSpecification.class);
         when(specification.specified(TETRAHEDRON)).thenReturn(false);
 
         TetrahedronRepository repository = new TetrahedronRepository();
 
-        repository.add(TETRAHEDRON);
-
         // when
         List<NumberedTetrahedron> tetrahedronList = repository.query(specification);
 
         // then
         Assert.assertTrue(tetrahedronList.isEmpty());
+    }
 
-        verify(specification, times(ONE_INVOCATION)).specified(TETRAHEDRON);
+    @Test
+    public void testAddShouldAddTetrahedronToRepositoryWhenRepositoryNotHasIt() {
+        // given
+        TetrahedronRepository repository = new TetrahedronRepository();
+
+        // when
+        repository.add(TETRAHEDRON);
+
+        // then
+        Map<Integer, NumberedTetrahedron> tetrahedronsMap = repository.getTetrahedrons();
+        Collection<NumberedTetrahedron> tetrahedrons = tetrahedronsMap.values();
+
+        boolean collectionContainsTetrahedron = tetrahedrons.contains(TETRAHEDRON);
+
+        Assert.assertTrue(collectionContainsTetrahedron);
+    }
+
+    @Test
+    public void testAddShouldNotAddTetrahedronToRepositoryWhenRepositoryAlreadyHasIt() {
+        // given
+        TetrahedronRepository repository = new TetrahedronRepository();
+        repository.add(TETRAHEDRON);
+
+        // when
+        repository.add(TETRAHEDRON);
+
+        // then
+        Map<Integer, NumberedTetrahedron> tetrahedronsMap = repository.getTetrahedrons();
+        Collection<NumberedTetrahedron> tetrahedrons = tetrahedronsMap.values();
+
+        boolean collectionContainsTetrahedron = tetrahedrons.contains(TETRAHEDRON);
+
+        int tetrahedronsNumber = tetrahedrons.size();
+
+        Assert.assertTrue(collectionContainsTetrahedron);
+        Assert.assertEquals(ONE_TETRAHEDRON, tetrahedronsNumber);
     }
 }
