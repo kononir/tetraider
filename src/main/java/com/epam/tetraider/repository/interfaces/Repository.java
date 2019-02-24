@@ -1,6 +1,6 @@
 package com.epam.tetraider.repository.interfaces;
 
-import com.epam.tetraider.model.NumberedTetrahedron;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
 
 import java.util.List;
 

@@ -1,8 +1,10 @@
 package com.epam.tetraider.repository.specifications.tetrahedron;
 
+import com.epam.tetraider.exceptions.SpecificationInvalidParametersException;
 import com.epam.tetraider.logic.interfaces.LineCalculator;
-import com.epam.tetraider.model.NumberedTetrahedron;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
+import com.epam.tetraider.model.point.OriginPoint;
+import com.epam.tetraider.model.point.Point;
 import com.epam.tetraider.repository.interfaces.Specification;
 
 public class OriginDistanceSpecification implements Specification<NumberedTetrahedron> {
@@ -11,7 +13,12 @@ public class OriginDistanceSpecification implements Specification<NumberedTetrah
     private LineCalculator calculator;
 
     public OriginDistanceSpecification(double desiredLowerDistance, double desiredUpperDistance,
-                                       LineCalculator calculator) {
+                                       LineCalculator calculator)
+            throws SpecificationInvalidParametersException {
+        if (calculator == null) {
+            throw new SpecificationInvalidParametersException("Invalid parameter: calculator!");
+        }
+
         this.desiredLowerDistance = desiredLowerDistance;
         this.desiredUpperDistance = desiredUpperDistance;
         this.calculator = calculator;
@@ -23,9 +30,7 @@ public class OriginDistanceSpecification implements Specification<NumberedTetrah
         Point baseCenterPoint = tetrahedron.getBaseCenterPoint();
 
         Point tetrahedronCenterPoint = calculator.findCenterOfHorizontalLine(topPoint, baseCenterPoint);
-
-        double zeroCord = 0;
-        Point originPoint = new Point(zeroCord, zeroCord, zeroCord);
+        Point originPoint = OriginPoint.getInstance();
 
         double distance = calculator.calculateDistanceBetweenPoints(tetrahedronCenterPoint, originPoint);
 

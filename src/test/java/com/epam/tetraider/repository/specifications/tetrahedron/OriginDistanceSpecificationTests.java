@@ -1,11 +1,11 @@
 package com.epam.tetraider.repository.specifications.tetrahedron;
 
+import com.epam.tetraider.exceptions.SpecificationInvalidParametersException;
 import com.epam.tetraider.logic.LineCalculatorImpl;
 import com.epam.tetraider.logic.interfaces.LineCalculator;
-import com.epam.tetraider.model.NumberedTetrahedron;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
+import com.epam.tetraider.model.point.Point;
 import com.epam.tetraider.repository.interfaces.Specification;
-import com.epam.tetraider.repository.specifications.tetrahedron.OriginDistanceSpecification;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,8 +30,11 @@ public class OriginDistanceSpecificationTests {
     private static final double TRUE_DISTANCE = 3;
     private static final double FALSE_DISTANCE = 100000;
 
+    private static final LineCalculator NULL_CALCULATOR = null;
+
     @Test
-    public void testSpecifiedShouldReturnTrueWhenTetrahedronCorrespondToSpecification() {
+    public void testSpecifiedShouldReturnTrueWhenTetrahedronCorrespondToSpecification()
+            throws SpecificationInvalidParametersException {
         // given
         LineCalculator calculator = mock(LineCalculatorImpl.class);
         when(calculator.findCenterOfHorizontalLine(FIRST_POINT, SECOND_POINT)).thenReturn(CENTER_POINT);
@@ -54,7 +57,8 @@ public class OriginDistanceSpecificationTests {
     }
 
     @Test
-    public void testSpecifiedShouldReturnFalseWhenTetrahedronNotCorrespondToSpecification() {
+    public void testSpecifiedShouldReturnFalseWhenTetrahedronNotCorrespondToSpecification()
+            throws SpecificationInvalidParametersException {
         // given
         LineCalculator calculator = mock(LineCalculatorImpl.class);
         when(calculator.findCenterOfHorizontalLine(FIRST_POINT, SECOND_POINT)).thenReturn(CENTER_POINT);
@@ -74,5 +78,17 @@ public class OriginDistanceSpecificationTests {
 
         verify(calculator, atLeastOnce()).findCenterOfHorizontalLine(FIRST_POINT, SECOND_POINT);
         verify(calculator, atLeastOnce()).calculateDistanceBetweenPoints(CENTER_POINT, ORIGIN_POINT);
+    }
+
+    @Test (expected = SpecificationInvalidParametersException.class)
+    public void testSpecifiedShouldThrowExceptionWhenGivenNull()
+            throws SpecificationInvalidParametersException {
+        // given
+
+        // when
+        new OriginDistanceSpecification(LOWER_DISTANCE, UPPER_DISTANCE, NULL_CALCULATOR);
+
+        // then
+        Assert.fail();
     }
 }

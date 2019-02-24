@@ -14,7 +14,7 @@ public class DataReaderImplTests {
     private static final String INVALID_PATH = "invalid path!";
     private static final String VALID_PATH_EMPTY_FILE = "src/test/resources/empty.txt";
 
-    private static final List<String> EXPECTED = Collections.singletonList("1");
+    private static final List<String> EXPECTED = Collections.singletonList("1.0");
 
     @Test
     public void testReadFileShouldReturnOneWhenReadFileWithOne() throws IllegalFileNameException,

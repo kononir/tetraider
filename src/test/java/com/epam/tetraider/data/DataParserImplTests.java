@@ -1,7 +1,6 @@
 package com.epam.tetraider.data;
 
-import com.epam.tetraider.data.DataParserImpl;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.point.Point;
 import org.junit.Assert;
 import org.junit.Test;
 

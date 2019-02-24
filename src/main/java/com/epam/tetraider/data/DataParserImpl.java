@@ -1,7 +1,7 @@
 package com.epam.tetraider.data;
 
 import com.epam.tetraider.data.interfaces.DataParser;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.point.Point;
 
 import java.util.ArrayList;
 import java.util.List;

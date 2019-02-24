@@ -1,6 +1,6 @@
 package com.epam.tetraider.sorting.comparators.point;
 
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.point.Point;
 import org.junit.Assert;
 import org.junit.Test;
 

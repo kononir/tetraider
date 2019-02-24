@@ -1,9 +1,9 @@
 package com.epam.tetraider.repository.specifications.point;
 
-import com.epam.tetraider.model.Point;
-import com.epam.tetraider.repository.interfaces.Specification;
+import com.epam.tetraider.model.point.Point;
+import com.epam.tetraider.repository.interfaces.markers.XCoordinateSpecification;
 
-public class PointPositiveXCoordinateSpecification implements Specification<Point> {
+public class PointPositiveXCoordinateSpecification implements XCoordinateSpecification {
 
     @Override
     public boolean specified(Point point) {

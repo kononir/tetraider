@@ -2,8 +2,8 @@ package com.epam.tetraider.observer;
 
 import com.epam.tetraider.logic.TetrahedronCalculatorImpl;
 import com.epam.tetraider.logic.interfaces.TetrahedronCalculator;
-import com.epam.tetraider.model.Point;
-import com.epam.tetraider.model.TetrahedronParameters;
+import com.epam.tetraider.model.point.Point;
+import com.epam.tetraider.model.tetrahedron.TetrahedronParameters;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -2,8 +2,8 @@ package com.epam.tetraider.logic;
 
 import com.epam.tetraider.logic.interfaces.LineCalculator;
 import com.epam.tetraider.logic.interfaces.TetrahedronCalculator;
-import com.epam.tetraider.model.Point;
-import com.epam.tetraider.model.Tetrahedron;
+import com.epam.tetraider.model.point.Point;
+import com.epam.tetraider.model.tetrahedron.Tetrahedron;
 
 public class TetrahedronCalculatorImpl implements TetrahedronCalculator {
 

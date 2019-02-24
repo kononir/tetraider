@@ -1,6 +1,6 @@
 package com.epam.tetraider.sorting;
 
-import com.epam.tetraider.model.NumberedTetrahedron;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
 
 import java.util.Comparator;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.epam.tetraider.repository;
 
-import com.epam.tetraider.model.NumberedTetrahedron;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
+import com.epam.tetraider.model.point.Point;
 import com.epam.tetraider.repository.interfaces.Specification;
 import com.epam.tetraider.repository.specifications.tetrahedron.OctantSpecification;
 import org.junit.Assert;

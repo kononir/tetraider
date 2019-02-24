@@ -1,7 +1,7 @@
 package com.epam.tetraider.observer;
 
-import com.epam.tetraider.model.NumberedTetrahedron;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
+import com.epam.tetraider.model.point.Point;
 import com.epam.tetraider.observer.interfaces.Observer;
 import org.junit.Test;
 

@@ -3,7 +3,7 @@ package com.epam.tetraider.data;
 import com.epam.tetraider.logic.LineCalculatorImpl;
 import com.epam.tetraider.logic.interfaces.LineCalculator;
 import com.epam.tetraider.logic.interfaces.PointsValidator;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.point.Point;
 
 public class PointsValidatorImpl implements PointsValidator {
     @Override

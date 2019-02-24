@@ -1,4 +1,4 @@
-package com.epam.tetraider.model;
+package com.epam.tetraider.model.point;
 
 public class Point {
     private final double xCord;

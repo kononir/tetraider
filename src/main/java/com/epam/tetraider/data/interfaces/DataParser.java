@@ -1,6 +1,6 @@
 package com.epam.tetraider.data.interfaces;
 
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.point.Point;
 
 import java.util.List;
 

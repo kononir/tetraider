@@ -1,4 +1,6 @@
-package com.epam.tetraider.model;
+package com.epam.tetraider.model.tetrahedron;
+
+import com.epam.tetraider.model.point.Point;
 
 public class NumberedTetrahedron extends Tetrahedron {
     private final Integer id;

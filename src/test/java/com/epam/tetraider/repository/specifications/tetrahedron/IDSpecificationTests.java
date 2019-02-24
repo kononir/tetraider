@@ -1,9 +1,9 @@
 package com.epam.tetraider.repository.specifications.tetrahedron;
 
-import com.epam.tetraider.model.NumberedTetrahedron;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.exceptions.SpecificationInvalidParametersException;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
+import com.epam.tetraider.model.point.Point;
 import com.epam.tetraider.repository.interfaces.Specification;
-import com.epam.tetraider.repository.specifications.tetrahedron.IDSpecification;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,9 +23,11 @@ public class IDSpecificationTests {
     );
 
     private final static Integer DESIRED_ID = 1;
+    private final static Integer NULL_DESIRED_ID = null;
 
     @Test
-    public void testSpecifiedShouldReturnTrueWhenTetrahedronCorrespondToSpecification() {
+    public void testSpecifiedShouldReturnTrueWhenTetrahedronCorrespondToSpecification()
+            throws SpecificationInvalidParametersException {
         // given
         Specification<NumberedTetrahedron> specification = new IDSpecification(DESIRED_ID);
 
@@ -37,7 +39,8 @@ public class IDSpecificationTests {
     }
 
     @Test
-    public void testSpecifiedShouldReturnFalseWhenTetrahedronNotCorrespondToSpecification() {
+    public void testSpecifiedShouldReturnFalseWhenTetrahedronNotCorrespondToSpecification()
+            throws SpecificationInvalidParametersException {
         // given
         Specification<NumberedTetrahedron> specification = new IDSpecification(DESIRED_ID);
 
@@ -46,5 +49,17 @@ public class IDSpecificationTests {
 
         // then
         Assert.assertFalse(actual);
+    }
+
+    @Test (expected = SpecificationInvalidParametersException.class)
+    public void testSpecifiedShouldThrowExceptionWhenGivenNull()
+            throws SpecificationInvalidParametersException {
+        // given
+
+        // when
+        new IDSpecification(NULL_DESIRED_ID);
+
+        // then
+        Assert.fail();
     }
 }

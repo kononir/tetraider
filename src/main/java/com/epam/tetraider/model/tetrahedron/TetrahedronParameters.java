@@ -1,4 +1,4 @@
-package com.epam.tetraider.model;
+package com.epam.tetraider.model.tetrahedron;
 
 public class TetrahedronParameters {
     private final double area;

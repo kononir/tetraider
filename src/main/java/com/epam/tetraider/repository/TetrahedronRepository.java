@@ -1,6 +1,6 @@
 package com.epam.tetraider.repository;
 
-import com.epam.tetraider.model.NumberedTetrahedron;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
 import com.epam.tetraider.repository.interfaces.Repository;
 import com.epam.tetraider.repository.interfaces.Specification;
 
@@ -8,6 +8,10 @@ import java.util.*;
 
 public class TetrahedronRepository implements Repository<NumberedTetrahedron> {
     private Map<Integer, NumberedTetrahedron> tetrahedrons = new HashMap<>();
+
+    public Map<Integer, NumberedTetrahedron> getTetrahedrons() {
+        return tetrahedrons;
+    }
 
     @Override
     public void add(NumberedTetrahedron tetrahedron) {

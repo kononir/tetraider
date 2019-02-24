@@ -1,11 +1,12 @@
 package com.epam.tetraider.repository.specifications.tetrahedron;
 
+import com.epam.tetraider.exceptions.SpecificationInvalidParametersException;
 import com.epam.tetraider.logic.TetrahedronCalculatorImpl;
+import com.epam.tetraider.logic.TetrahedronCalculatorImplTests;
 import com.epam.tetraider.logic.interfaces.TetrahedronCalculator;
-import com.epam.tetraider.model.NumberedTetrahedron;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
+import com.epam.tetraider.model.point.Point;
 import com.epam.tetraider.repository.interfaces.Specification;
-import com.epam.tetraider.repository.specifications.tetrahedron.AreaSpecification;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,8 +25,11 @@ public class AreaSpecificationTests {
     private static final double TRUE_AREA = 20.78;
     private static final double FALSE_AREA = 100000;
 
+    private static final TetrahedronCalculator NULL_CALCULATOR = null;
+
     @Test
-    public void testSpecifiedShouldReturnTrueWhenTetrahedronCorrespondToSpecification() {
+    public void testSpecifiedShouldReturnTrueWhenTetrahedronCorrespondToSpecification()
+            throws SpecificationInvalidParametersException {
         // given
         TetrahedronCalculator calculator = mock(TetrahedronCalculatorImpl.class);
         when(calculator.calculateSurfaceArea(TETRAHEDRON)).thenReturn(TRUE_AREA);
@@ -42,7 +46,8 @@ public class AreaSpecificationTests {
     }
 
     @Test
-    public void testSpecifiedShouldReturnFalseWhenTetrahedronNotCorrespondToSpecification() {
+    public void testSpecifiedShouldReturnFalseWhenTetrahedronNotCorrespondToSpecification()
+            throws SpecificationInvalidParametersException {
         // given
         TetrahedronCalculator calculator = mock(TetrahedronCalculatorImpl.class);
         when(calculator.calculateSurfaceArea(TETRAHEDRON)).thenReturn(FALSE_AREA);
@@ -56,5 +61,17 @@ public class AreaSpecificationTests {
         Assert.assertFalse(actual);
 
         verify(calculator, atLeastOnce()).calculateSurfaceArea(TETRAHEDRON);
+    }
+
+    @Test (expected = SpecificationInvalidParametersException.class)
+    public void testSpecifiedShouldThrowExceptionWhenGivenNull()
+            throws SpecificationInvalidParametersException {
+        // given
+
+        // when
+        new AreaSpecification(LOWER_AREA, UPPER_AREA, NULL_CALCULATOR);
+
+        // then
+        Assert.fail();
     }
 }

@@ -1,8 +1,8 @@
 package com.epam.tetraider.observer;
 
 import com.epam.tetraider.logic.interfaces.TetrahedronCalculator;
-import com.epam.tetraider.model.NumberedTetrahedron;
-import com.epam.tetraider.model.TetrahedronParameters;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
+import com.epam.tetraider.model.tetrahedron.TetrahedronParameters;
 import com.epam.tetraider.observer.interfaces.Observer;
 
 import java.util.HashMap;

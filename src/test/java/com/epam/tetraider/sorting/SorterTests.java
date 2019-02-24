@@ -1,7 +1,7 @@
 package com.epam.tetraider.sorting;
 
-import com.epam.tetraider.model.NumberedTetrahedron;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.tetrahedron.NumberedTetrahedron;
+import com.epam.tetraider.model.point.Point;
 import com.epam.tetraider.sorting.comparators.tetrahedron.id.IDComparator;
 import org.junit.Assert;
 import org.junit.Test;

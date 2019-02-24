@@ -1,7 +1,7 @@
 package com.epam.tetraider.logic;
 
 import com.epam.tetraider.logic.interfaces.LineCalculator;
-import com.epam.tetraider.model.Point;
+import com.epam.tetraider.model.point.Point;
 
 public class LineCalculatorImpl implements LineCalculator {
     @Override
